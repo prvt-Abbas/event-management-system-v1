@@ -1,6 +1,8 @@
-// When served by the backend on :5000 use relative /api (no CORS/port issue).
-// When served on another port (e.g. Live Server :3000) use localhost:5000.
-const API = (window.location.port === '5000' ? '' : 'http://localhost:5000') + '/api';
+// Served by the backend (localhost:5000, or a deployed domain like Railway):
+// use relative /api, so it works on any host/port with no CORS issue.
+// Only when opened locally on another port (e.g. Live Server :3000),
+// fall back to localhost:5000.
+const API = (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '5000' ? 'http://localhost:5000' : '') + '/api';
 const fmt = n => 'Rs ' + Number(n || 0).toLocaleString('en-PK');
 const fmtDate = d => new Date(d).toLocaleString('en-PK', { dateStyle: 'medium', timeStyle: 'short' });
 
