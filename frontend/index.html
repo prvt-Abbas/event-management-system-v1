@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EventHub — Discover, Create &amp; Manage Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ AUTH SCREEN: Login + Registration forms ============ -->
+<section id="authScreen" class="auth-wrap">
+  <div class="auth-split">
+
+    <!-- Brand panel -->
+    <aside class="auth-brand">
+      <div class="brand-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="brand-inner">
+        <p class="brand-eyebrow">Est. 2026 &nbsp;·&nbsp; Curated Gatherings</p>
+        <h1 class="brand-logo"><span class="logo-mark">E</span>EventHub</h1>
+        <p class="brand-rule" aria-hidden="true"></p>
+        <p class="brand-tagline">Thoughtfully curated events,<br>beautifully managed.</p>
+        <p class="brand-sub">Discover conferences, concerts and workshops — register in seconds, or host your own.</p>
+
+        <div class="brand-stats">
+          <div class="brand-stat"><b>120+</b><span>Events hosted</span></div>
+          <div class="brand-stat"><b>4.9</b><span>Guest rating</span></div>
+          <div class="brand-stat"><b>6</b><span>Categories</span></div>
+        </div>
+
+        <div class="brand-teaser">
+          <p class="teaser-label">Featured this season</p>
+          <p class="teaser-title">The Annual Tech &amp; Design Summit</p>
+          <p class="teaser-meta">Karachi Expo Centre &nbsp;·&nbsp; 500 seats &nbsp;·&nbsp; From Free</p>
+        </div>
+      </div>
+      <p class="brand-foot">EventHub &nbsp;·&nbsp; Discover · Create · Manage</p>
+    </aside>
+
+    <!-- Form card -->
+    <div id="auth-card" class="auth-card">
+      <p class="card-eyebrow">Welcome to EventHub</p>
+      <h2>Sign in to your account</h2>
+      <p class="muted">Discover, create and manage events — all in one place.</p>
+      <p id="connStatus" class="conn muted small">Checking backend…</p>
+
+      <div class="auth-tabs">
+        <button id="tabLoginBtn" class="active" onclick="showAuth('login')">Log In</button>
+        <button id="tabRegisterBtn" onclick="showAuth('register')">Register</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" onsubmit="doLogin(event)">
+        <label>Email</label>
+        <input id="loginEmail" type="email" placeholder="you@example.com" required>
+        <label>Password</label>
+        <input id="loginPassword" type="password" placeholder="Your password" required>
+        <button class="primary wide btn-shine" type="submit">Log In</button>
+        <p class="muted small demo-line">Demo: admin@events.com / admin123 &nbsp;·&nbsp; organizer@events.com / organizer123 &nbsp;·&nbsp; user@events.com / user123</p>
+        <p class="demo-btns"><button type="button" class="ghost" onclick="fillDemo('admin@events.com','admin123')">Fill admin demo</button>
+           <button type="button" class="ghost" onclick="fillDemo('user@events.com','user123')">Fill attendee demo</button></p>
+      </form>
+
+      <!-- REGISTRATION FORM -->
+      <form id="registerForm" class="hidden" onsubmit="doRegister(event)">
+        <label>Full Name</label>
+        <input id="regName" type="text" placeholder="Your full name" required>
+        <label>Email</label>
+        <input id="regEmail" type="email" placeholder="you@example.com" required>
+        <label>Phone (optional)</label>
+        <input id="regPhone" type="tel" placeholder="03xx-xxxxxxx">
+        <label>I am registering as</label>
+        <select id="regRole">
+          <option value="attendee">Attendee — I want to join events</option>
+          <option value="organizer">Organizer — I want to create events</option>
+        </select>
+        <label>Password (min 6 characters)</label>
+        <input id="regPassword" type="password" placeholder="Choose a password" required>
+        <label>Confirm Password</label>
+        <input id="regConfirm" type="password" placeholder="Repeat your password" required>
+        <button class="primary wide btn-shine" type="submit">Create Account</button>
+        <p class="muted small">Already have an account? <a href="#" onclick="showAuth('login');return false;">Log in</a></p>
+      </form>
+      <p id="authMsg" class="msg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAIN APP (shown after login) ============ -->
+<section id="appScreen" class="hidden">
+  <header class="app-header">
+    <h1 class="app-logo"><span class="logo-mark">E</span>EventHub</h1>
+    <div class="header-right">
+      <span id="userInfo" class="user-chip"></span>
+      <button class="ghost" onclick="logout()">Log Out</button>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')">Dashboard</button>
+    <button class="nav-btn" data-tab="events" onclick="showTab('events')">Events</button>
+    <button class="nav-btn" data-tab="myregs" onclick="showTab('myregs')">My Registrations</button>
+    <button class="nav-btn" data-tab="create" onclick="showTab('create')">Create Event</button>
+  </nav>
+  <p id="appMsg" class="msg"></p>
+
+  <!-- Dashboard -->
+  <div id="tab-dashboard" class="tab active">
+    <div class="hero">
+      <div>
+        <p class="hero-eyebrow">Your events, at a glance</p>
+        <h2 id="heroGreeting">Welcome back</h2>
+        <p class="hero-sub">A curated look at what is happening next — and where you are headed.</p>
+      </div>
+      <div class="hero-badge" aria-hidden="true">
+        <span class="hero-badge-day">✦</span>
+        <span class="hero-badge-text">Season<br>2026</span>
+      </div>
+    </div>
+    <div id="stats" class="stats"></div>
+    <h3 class="section-title">Upcoming Events</h3>
+    <div id="upcomingList" class="grid"></div>
+  </div>
+
+  <!-- Events -->
+  <div id="tab-events" class="tab">
+    <h2 class="page-title">Browse Events</h2>
+    <p class="muted page-sub">Search by title or venue, or filter by category.</p>
+    <div class="filters">
+      <input id="searchInput" type="text" placeholder="Search events or venue…" oninput="renderEvents()">
+      <div id="categoryFilters" class="pill-row"></div>
+    </div>
+    <div id="eventGrid" class="grid"></div>
+  </div>
+
+  <!-- My Registrations -->
+  <div id="tab-myregs" class="tab">
+    <h2 class="page-title">My Registrations</h2>
+    <p class="muted page-sub">Every event you have booked, in one place.</p>
+    <div id="myRegList" class="grid"></div>
+  </div>
+
+  <!-- Create Event -->
+  <div id="tab-create" class="tab">
+    <h2 class="page-title">Create a New Event</h2>
+    <p id="createNote" class="muted"></p>
+    <form id="createForm" onsubmit="createEvent(event)">
+      <label>Event Title</label>
+      <input id="evTitle" required placeholder="e.g. Tech Meetup 2026">
+      <label>Category</label>
+      <select id="evCategory"></select>
+      <label>Venue</label>
+      <input id="evVenue" required placeholder="e.g. Karachi Expo Centre">
+      <label>Date &amp; Time</label>
+      <input id="evDate" type="datetime-local" required>
+      <label>Capacity (seats)</label>
+      <input id="evCapacity" type="number" min="1" value="100" required>
+      <label>Ticket Price (Rs, 0 = free)</label>
+      <input id="evPrice" type="number" min="0" step="0.01" value="0" required>
+      <label>Description</label>
+      <textarea id="evDesc" rows="3" placeholder="What is this event about?"></textarea>
+      <button class="primary btn-shine" type="submit">Create Event</button>
+    </form>
+  </div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
